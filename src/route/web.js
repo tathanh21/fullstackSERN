@@ -7,9 +7,11 @@ let initWebRoutes = (app) => {
     router.get("/crud", homeController.getCRUD)
     router.post("/post-crud", homeController.postCRUD)
 
-    router.get("/hoidanit", (req, res) => {
-        return res.send("Hello World hoidanit");
-    })
+    router.get("/get-crud", homeController.displayCRUD)
+    router.get("/edit-crud", homeController.editCRUD)
+    router.post("/put-crud", homeController.putCRUD)
+    router.get("/delete-crud", homeController.deleteCRUD)
+
     return app.use("/", router);
 }
 module.exports = initWebRoutes;
