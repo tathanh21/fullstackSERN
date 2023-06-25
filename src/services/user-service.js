@@ -83,23 +83,25 @@ let createNewUser = (data) => {
             if (check === true) {
                 resolve({
                     errCode: 1,
-                    message: 'Your email is already in used, Plz try another email'
+                    errMessage: 'Your email is already in used, Plz try another email'
+                });
+            } else {
+                await db.User.create({
+                    email: data.email,
+                    password: data.password,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    address: data.address,
+                    phoneNumber: data.phoneNumber,
+                    gender: data.gender === '1' ? true : false,
+                    roleId: data.roleId,
+                })
+                resolve({
+                    errCode: 0,
+                    message: 'Ok'
                 });
             }
-            await db.User.create({
-                email: data.email,
-                password: data.password,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                address: data.address,
-                phoneNumber: data.phoneNumber,
-                gender: data.gender === '1' ? true : false,
-                roleId: data.roleId,
-            })
-            resolve({
-                errCode: 0,
-                message: 'Ok'
-            });
+
         } catch (error) {
             reject(error)
         }
@@ -129,6 +131,7 @@ let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!data.id) {
+                console.log(data)
                 resolve({
                     errCode: 2,
                     errMessage: 'Missing required parameter!'
