@@ -18,6 +18,7 @@ let handleUserLogin = (email, password) => {
                     if (check) {
                         userData.errCode = 0;
                         userData.errMessage = `ok`,
+                            delete user.password,
                             userData.user = user
                     } else {
                         userData.errCode = 3;
@@ -32,6 +33,7 @@ let handleUserLogin = (email, password) => {
                 userData.errCode = 1;
                 userData.errMessage = `Your's Email isn't exist in your system. Plz try other email!`
             }
+            // console.log('login', userData)
             resolve(userData)
         } catch (error) {
             reject(error)
