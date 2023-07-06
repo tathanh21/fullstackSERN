@@ -68,6 +68,7 @@ let saveDetailInfoDoctor = (inputData) => {
                         where: { doctorId: inputData.doctorId },
                         raw: false
                     })
+                    //upsert to Markdown
                     if (doctorMarkdown) {
                         doctorMarkdown.contentHTML = inputData.contentHTML;
                         doctorMarkdown.ontentMarkdown = inputData.contentMarkdown;
@@ -75,7 +76,37 @@ let saveDetailInfoDoctor = (inputData) => {
                         await doctorMarkdown.save()
                     }
                 }
+                // upsert to Doctor_inro table
+                let doctorInfo = await db.Doctor_Info.findOne({
+                    where: {
+                        doctorId: inputData.doctorId
+                    },
+                    raw: false
+                })
+                if (doctorInfo) {
+                    //update
+                    doctorInfo.doctorId = inputData.doctorId;
+                    doctorInfo.priceId = inputData.selectedPrice;
+                    doctorInfo.provinceId = inputData.selectedProvince;
+                    doctorInfo.paymentId = inputData.selectedPayment;
 
+                    doctorInfo.nameClinic = inputData.nameClinic;
+                    doctorInfo.addressClinic = inputData.addressClinic;
+                    doctorInfo.note = inputData.note;
+
+                    await doctorInfo.save()
+                } else {
+                    //create
+                    await db.Doctor_Info.create({
+                        doctorId: inputData.doctorId,
+                        priceId: inputData.selectedPrice,
+                        provinceId: inputData.selectedProvince,
+                        paymentId: inputData.selectedPayment,
+                        nameClinic: inputData.nameClinic,
+                        addressClinic: inputData.addressClinic,
+                        note: inputData.note,
+                    })
+                }
                 resolve({
                     errCode: 0,
                     errMessage: 'Save info doctor success'
